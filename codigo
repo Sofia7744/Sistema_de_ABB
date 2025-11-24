@@ -1,0 +1,271 @@
+#include <iostream>
+#include <string>
+#include <locale>
+
+using namespace std;
+
+struct Nodo {
+    int anio;
+    string nombre;
+    Nodo* izq;
+    Nodo* der;
+};
+
+// Crear nuevo nodo
+Nodo* crearNodo(int anio, string nombre) {
+    Nodo* nuevo = new Nodo();
+    nuevo->anio = anio;
+    nuevo->nombre = nombre;
+    nuevo->izq = NULL;
+    nuevo->der = NULL;
+    return nuevo;
+}
+
+// Convertir nombre a mayúsculas (simple)
+void convertirMayusculas(string &s) {
+    for (int i = 0; i < s.length(); i++) {
+        s[i] = toupper(s[i]);
+    }
+}
+
+// Insertar en ABB ordenado por año (RECHAZAR DUPLICADOS)
+Nodo* insertar(Nodo* arbol, int anio, string nombre, bool &insertado) {
+    if (arbol == NULL) {
+        insertado = true;
+        return crearNodo(anio, nombre);
+    }
+    if (anio < arbol->anio) {
+        arbol->izq = insertar(arbol->izq, anio, nombre, insertado);
+    }
+    else if (anio > arbol->anio) {
+        arbol->der = insertar(arbol->der, anio, nombre, insertado);
+    }
+    else {
+        // Año duplicado ? no insertar
+        insertado = false;
+    }
+    return arbol;
+}
+
+// Buscar por año
+Nodo* buscar(Nodo* arbol, int anio) {
+    if (arbol == NULL) return NULL;
+    if (anio == arbol->anio) return arbol;
+    if (anio < arbol->anio) return buscar(arbol->izq, anio);
+    return buscar(arbol->der, anio);
+}
+
+// Obtener mínimo del subárbol derecho
+Nodo* minimo(Nodo* arbol) {
+    if (arbol == NULL) return NULL;
+    if (arbol->izq == NULL) return arbol;
+    return minimo(arbol->izq);
+}
+
+// Eliminar por año
+Nodo* eliminarNodo(Nodo* arbol, int anio, bool &eliminado) {
+    if (arbol == NULL) {
+        eliminado = false;
+        return NULL;
+    }
+
+    if (anio < arbol->anio) {
+        arbol->izq = eliminarNodo(arbol->izq, anio, eliminado);
+    }
+    else if (anio > arbol->anio) {
+        arbol->der = eliminarNodo(arbol->der, anio, eliminado);
+    }
+    else {
+        eliminado = true;
+
+        // Caso 1: sin hijos
+        if (arbol->izq == NULL && arbol->der == NULL) {
+            delete arbol;
+            return NULL;
+        }
+        // Caso 2: un hijo
+        if (arbol->izq == NULL) {
+            Nodo* temp = arbol->der;
+            delete arbol;
+            return temp;
+        }
+        if (arbol->der == NULL) {
+            Nodo* temp = arbol->izq;
+            delete arbol;
+            return temp;
+        }
+        // Caso 3: dos hijos
+        Nodo* suc = minimo(arbol->der);
+        arbol->anio = suc->anio;
+        arbol->nombre = suc->nombre;
+        arbol->der = eliminarNodo(arbol->der, suc->anio, eliminado);
+    }
+    return arbol;
+}
+
+// Recorridos
+void inorden(Nodo* arbol) {
+    if (arbol == NULL) return;
+    inorden(arbol->izq);
+    cout << arbol->anio << " - " << arbol->nombre << " | ";
+    inorden(arbol->der);
+}
+
+void preorden(Nodo* arbol) {
+    if (arbol == NULL) return;
+    cout << arbol->anio << " - " << arbol->nombre << " | ";
+    preorden(arbol->izq);
+    preorden(arbol->der);
+}
+
+void postorden(Nodo* arbol) {
+    if (arbol == NULL) return;
+    postorden(arbol->izq);
+    postorden(arbol->der);
+    cout << arbol->anio << " - " << arbol->nombre << " | ";
+}
+
+int main() {
+    setlocale(LC_ALL, "Spanish");
+
+    Nodo* arbol = NULL;
+    int opcion;
+
+    cout << "=== Árbol Genealógico (ABB) - Ordenado por AÑO ===\n";
+
+    do {
+        cout << "\n--- MENÚ ---\n";
+        cout << "1. Insertar familiar\n";
+        cout << "2. Buscar familiar\n";
+        cout << "3. Eliminar familiar\n";
+        cout << "4. Mostrar Inorden\n";
+        cout << "5. Mostrar Preorden\n";
+        cout << "6. Mostrar Postorden\n";
+        cout << "7. Salir\n";
+        cout << "Opción: ";
+        cin >> opcion;
+        cin.ignore();
+
+        switch (opcion) {
+
+        case 1: {
+            int anio;
+            string nombre;
+
+            cout << "Ingrese el año de nacimiento: ";
+            cin >> anio;
+
+            if (cin.fail() || anio <= 0) {
+                cout << "Error: año inválido.\n";
+                cin.clear();
+                cin.ignore(1000, '\n');
+                break;
+            }
+
+            cin.ignore(); 
+            cout << "Ingrese el nombre completo: ";
+            getline(cin, nombre);
+
+            if (nombre == "") {
+                cout << "Error: el nombre no puede estar vacío.\n";
+                break;
+            }
+
+            convertirMayusculas(nombre);
+
+            if (buscar(arbol, anio) != NULL) {
+                cout << "Error: ya existe un familiar con ese año.\n";
+                break;
+            }
+
+            bool insertado = false;
+            arbol = insertar(arbol, anio, nombre, insertado);
+
+            if (insertado)
+                cout << "Familiar insertado correctamente.\n";
+            else
+                cout << "Error al insertar.\n";
+
+            break;
+        }
+
+        case 2: {
+            if (arbol == NULL) {
+                cout << "Árbol vacío.\n";
+                break;
+            }
+
+            int anio;
+            cout << "Ingrese el año a buscar: ";
+            cin >> anio;
+
+            if (anio <= 0) {
+                cout << "Error: año inválido.\n";
+                break;
+            }
+
+            Nodo* encontrado = buscar(arbol, anio);
+            if (encontrado != NULL)
+                cout << "Encontrado: " << encontrado->anio << " - " << encontrado->nombre << "\n";
+            else
+                cout << "No existe un familiar con ese año.\n";
+
+            break;
+        }
+
+        case 3: {
+            if (arbol == NULL) {
+                cout << "Árbol vacío.\n";
+                break;
+            }
+
+            int anio;
+            cout << "Ingrese el año a eliminar: ";
+            cin >> anio;
+
+            if (anio <= 0) {
+                cout << "Error: año inválido.\n";
+                break;
+            }
+
+            bool eliminado = false;
+            arbol = eliminarNodo(arbol, anio, eliminado);
+
+            if (eliminado)
+                cout << "Familiar eliminado correctamente.\n";
+            else
+                cout << "No se encontró ese año.\n";
+
+            break;
+        }
+
+        case 4:
+            cout << "INORDEN:\n";
+            inorden(arbol);
+            cout << endl;
+            break;
+
+        case 5:
+            cout << "PREORDEN:\n";
+            preorden(arbol);
+            cout << endl;
+            break;
+
+        case 6:
+            cout << "POSTORDEN:\n";
+            postorden(arbol);
+            cout << endl;
+            break;
+
+        case 7:
+            cout << "Saliendo...\n";
+            break;
+
+        default:
+            cout << "Opción inválida.\n";
+        }
+
+    } while (opcion != 7);
+
+    return 0;
+}
