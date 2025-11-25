@@ -133,16 +133,16 @@ int main() {
     //  DATOS SIMULADOS INSERTADOS AUTOMÁTICAMENTE
     // ======================================================
     bool insertado;
-    arbol = insertar(arbol, 1940, "JUAN PONCE", insertado);
-    arbol = insertar(arbol, 1942, "MARIA VILLAR", insertado);
-    arbol = insertar(arbol, 1965, "PEDRO PONCE", insertado);
     arbol = insertar(arbol, 1968, "LUCIA PONCE", insertado);
-    arbol = insertar(arbol, 1985, "ANDRES PONCE", insertado);
-    arbol = insertar(arbol, 1988, "SOFIA PONCE", insertado);
-    arbol = insertar(arbol, 1992, "CAMILA ROJAS", insertado);
-    arbol = insertar(arbol, 1995, "EDUARDO ROJAS", insertado);
-    arbol = insertar(arbol, 2010, "VALERIA PONCE", insertado);
-    arbol = insertar(arbol, 2012, "DIEGO PONCE", insertado);
+	arbol = insertar(arbol, 1942, "MARIA VILLAR", insertado);
+	arbol = insertar(arbol, 1995, "EDUARDO ROJAS", insertado);
+	arbol = insertar(arbol, 1940, "JUAN PONCE", insertado);
+	arbol = insertar(arbol, 1965, "PEDRO PONCE", insertado);
+	arbol = insertar(arbol, 1985, "ANDRES PONCE", insertado);
+	arbol = insertar(arbol, 1988, "SARA PONCE", insertado);
+	arbol = insertar(arbol, 1992, "CAMILA ROJAS", insertado);
+	arbol = insertar(arbol, 2010, "VALERIA PONCE", insertado);
+	arbol = insertar(arbol, 2012, "DIEGO PONCE", insertado);
 
     int opcion;
 
