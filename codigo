@@ -106,13 +106,13 @@ Nodo* eliminarNodo(Nodo* arbol, int anio, bool &eliminado) {
 void inorden(Nodo* arbol) {
     if (arbol == NULL) return;
     inorden(arbol->izq);
-    cout << arbol->anio << " - " << arbol->nombre << " | ";
+    cout << arbol->anio << " - " << arbol->nombre << "\n";
     inorden(arbol->der);
 }
 
 void preorden(Nodo* arbol) {
     if (arbol == NULL) return;
-    cout << arbol->anio << " - " << arbol->nombre << " | ";
+    cout << arbol->anio << " - " << arbol->nombre << "\n";
     preorden(arbol->izq);
     preorden(arbol->der);
 }
@@ -121,7 +121,7 @@ void postorden(Nodo* arbol) {
     if (arbol == NULL) return;
     postorden(arbol->izq);
     postorden(arbol->der);
-    cout << arbol->anio << " - " << arbol->nombre << " | ";
+    cout << arbol->anio << " - " << arbol->nombre << "\n";
 }
 
 int main() {
@@ -130,7 +130,7 @@ int main() {
     Nodo* arbol = NULL;
 
     // ======================================================
-    //  DATOS INSERTADOS
+    //  DATOS SIMULADOS INSERTADOS AUTOMÁTICAMENTE
     // ======================================================
     bool insertado;
     arbol = insertar(arbol, 1940, "JUAN PONCE", insertado);
@@ -167,7 +167,7 @@ int main() {
             int anio;
             string nombre;
 
-            cout << "Ingrese el año de nacimiento: ";
+            cout << "\nIngrese el año de nacimiento: ";
             cin >> anio;
 
             if (cin.fail() || anio <= 0) {
@@ -206,12 +206,12 @@ int main() {
 
         case 2: {
             if (arbol == NULL) {
-                cout << "Árbol vacío.\n";
+                cout << "\nÁrbol vacío.\n";
                 break;
             }
 
             int anio;
-            cout << "Ingrese el año a buscar: ";
+            cout << "\nIngrese el año a buscar: ";
             cin >> anio;
 
             if (anio <= 0) {
@@ -230,12 +230,15 @@ int main() {
 
         case 3: {
             if (arbol == NULL) {
-                cout << "Árbol vacío.\n";
+                cout << "\nÁrbol vacío.\n";
                 break;
             }
 
             int anio;
-            cout << "Ingrese el año a eliminar: ";
+            cout << "\n";
+            inorden(arbol);
+            cout << endl;
+            cout << "Ingrese el año del integrante a eliminar: ";
             cin >> anio;
 
             if (anio <= 0) {
@@ -255,19 +258,19 @@ int main() {
         }
 
         case 4:
-            cout << "INORDEN:\n";
+            cout << "\nINORDEN:\n";
             inorden(arbol);
             cout << endl;
             break;
 
         case 5:
-            cout << "PREORDEN:\n";
+            cout << "\nPREORDEN:\n";
             preorden(arbol);
             cout << endl;
             break;
 
         case 6:
-            cout << "POSTORDEN:\n";
+            cout << "\nPOSTORDEN:\n";
             postorden(arbol);
             cout << endl;
             break;
