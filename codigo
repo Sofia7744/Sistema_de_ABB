@@ -41,8 +41,7 @@ Nodo* insertar(Nodo* arbol, int anio, string nombre, bool &insertado) {
         arbol->der = insertar(arbol->der, anio, nombre, insertado);
     }
     else {
-        // Año duplicado ? no insertar
-        insertado = false;
+        insertado = false; // año duplicado
     }
     return arbol;
 }
@@ -129,6 +128,22 @@ int main() {
     setlocale(LC_ALL, "Spanish");
 
     Nodo* arbol = NULL;
+
+    // ======================================================
+    //  DATOS INSERTADOS
+    // ======================================================
+    bool insertado;
+    arbol = insertar(arbol, 1940, "JUAN PONCE", insertado);
+    arbol = insertar(arbol, 1942, "MARIA VILLAR", insertado);
+    arbol = insertar(arbol, 1965, "PEDRO PONCE", insertado);
+    arbol = insertar(arbol, 1968, "LUCIA PONCE", insertado);
+    arbol = insertar(arbol, 1985, "ANDRES PONCE", insertado);
+    arbol = insertar(arbol, 1988, "SOFIA PONCE", insertado);
+    arbol = insertar(arbol, 1992, "CAMILA ROJAS", insertado);
+    arbol = insertar(arbol, 1995, "EDUARDO ROJAS", insertado);
+    arbol = insertar(arbol, 2010, "VALERIA PONCE", insertado);
+    arbol = insertar(arbol, 2012, "DIEGO PONCE", insertado);
+
     int opcion;
 
     cout << "=== Árbol Genealógico (ABB) - Ordenado por AÑO ===\n";
@@ -162,7 +177,7 @@ int main() {
                 break;
             }
 
-            cin.ignore(); 
+            cin.ignore();
             cout << "Ingrese el nombre completo: ";
             getline(cin, nombre);
 
@@ -178,7 +193,7 @@ int main() {
                 break;
             }
 
-            bool insertado = false;
+            insertado = false;
             arbol = insertar(arbol, anio, nombre, insertado);
 
             if (insertado)
